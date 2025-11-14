@@ -1,0 +1,1907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rohit Kumar Sah | Digital Architect</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+    <style>
+        :root {
+            /* Light Mode Colors */
+            --primary-bg: #ffffff;
+            --secondary-bg: #f8fafc;
+            --text-primary: #1e293b;
+            --text-accent: #6366f1;
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            
+            /* Dark Mode Colors */
+            --dark-primary-bg: #0f172a;
+            --dark-secondary-bg: #1e293b;
+            --dark-text-primary: #f1f5f9;
+            --dark-text-accent: #818cf8;
+            --dark-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            
+            /* Typography */
+            --heading-font: 'Poppins', sans-serif;
+            --body-font: 'Inter', sans-serif;
+            
+            /* Transitions */
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--body-font);
+            color: var(--text-primary);
+            background-color: var(--primary-bg);
+            overflow-x: hidden;
+            transition: var(--transition);
+        }
+
+        body.dark-mode {
+            --primary-bg: var(--dark-primary-bg);
+            --secondary-bg: var(--dark-secondary-bg);
+            --text-primary: var(--dark-text-primary);
+            --text-accent: var(--dark-text-accent);
+            --gradient: var(--dark-gradient);
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(99, 102, 241, 0.2);
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+
+        .cursor.hover {
+            width: 40px;
+            height: 40px;
+            background: rgba(99, 102, 241, 0.4);
+        }
+
+        /* Preloader */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-bg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .logo-animation {
+            width: 150px;
+            height: 150px;
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .logo-line {
+            position: absolute;
+            background: var(--gradient);
+            border-radius: 2px;
+        }
+
+        .logo-line-1 {
+            width: 80px;
+            height: 8px;
+            top: 30px;
+            left: 35px;
+            transform: rotate(0deg);
+            animation: drawLine1 2s forwards;
+        }
+
+        .logo-line-2 {
+            width: 8px;
+            height: 80px;
+            top: 35px;
+            left: 30px;
+            transform: rotate(0deg);
+            animation: drawLine2 2s forwards 0.5s;
+        }
+
+        .logo-line-3 {
+            width: 60px;
+            height: 8px;
+            bottom: 30px;
+            right: 35px;
+            transform: rotate(0deg);
+            animation: drawLine3 2s forwards 1s;
+        }
+
+        @keyframes drawLine1 {
+            0% { width: 0; }
+            100% { width: 80px; }
+        }
+
+        @keyframes drawLine2 {
+            0% { height: 0; }
+            100% { height: 80px; }
+        }
+
+        @keyframes drawLine3 {
+            0% { width: 0; }
+            100% { width: 60px; }
+        }
+
+        .loading-bar {
+            width: 200px;
+            height: 4px;
+            background: var(--secondary-bg);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .loading-progress {
+            height: 100%;
+            width: 0%;
+            background: var(--gradient);
+            animation: loading 2s forwards;
+        }
+
+        @keyframes loading {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        /* Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            transition: var(--transition);
+        }
+
+        body.dark-mode header {
+            background: rgba(15, 23, 42, 0.8);
+        }
+
+        header.scrolled {
+            padding: 15px 5%;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-family: var(--heading-font);
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--text-accent);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 30px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        nav ul li a:hover {
+            color: var(--text-accent);
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient);
+            transition: var(--transition);
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--secondary-bg);
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .theme-icon {
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--text-primary);
+            margin: 3px 0;
+            transition: var(--transition);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            width: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-text {
+            flex: 1;
+            padding-right: 5%;
+        }
+
+        .hero-graphic {
+            flex: 1;
+            height: 500px;
+            position: relative;
+        }
+
+        .hero-graphic canvas {
+            border-radius: 20px;
+        }
+
+        .greeting {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--text-accent);
+            animation: textGlow 3s infinite alternate;
+        }
+
+        @keyframes textGlow {
+            0% { text-shadow: 0 0 5px rgba(99, 102, 241, 0.5); }
+            100% { text-shadow: 0 0 15px rgba(99, 102, 241, 0.8); }
+        }
+
+        .name {
+            font-family: var(--heading-font);
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            color: var(--text-primary);
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-secondary {
+            border: 2px solid var(--text-accent);
+            color: var(--text-accent);
+        }
+
+        .btn-secondary:hover {
+            background: var(--text-accent);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        /* About Section */
+        .section {
+            padding: 100px 5%;
+        }
+
+        .section-title {
+            font-family: var(--heading-font);
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--gradient);
+            border-radius: 2px;
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        body.dark-mode .about-content {
+            background: rgba(30, 41, 59, 0.5);
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .about-lists {
+            display: flex;
+            gap: 40px;
+            margin-top: 30px;
+        }
+
+        .list-container {
+            flex: 1;
+        }
+
+        .list-title {
+            font-family: var(--heading-font);
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--text-accent);
+        }
+
+        .styled-list {
+            list-style: none;
+        }
+
+        .styled-list li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .styled-list li::before {
+            content: '✓';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: var(--gradient);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 20px;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+
+        /* Skills Section */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .skill-pod {
+            background: var(--secondary-bg);
+            border-radius: 20px;
+            padding: 30px 20px;
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-pod::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 0;
+        }
+
+        .skill-pod:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .skill-pod:hover::before {
+            opacity: 0.1;
+        }
+
+        .skill-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 15px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .skill-icon i {
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .skill-name {
+            font-family: var(--heading-font);
+            font-weight: 600;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Education Section */
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background: var(--gradient);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+            border-radius: 3px;
+        }
+
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 50%;
+        }
+
+        .timeline-content {
+            padding: 20px 30px;
+            background: var(--secondary-bg);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .timeline-date {
+            font-weight: 600;
+            color: var(--text-accent);
+            margin-bottom: 5px;
+        }
+
+        .timeline-title {
+            font-family: var(--heading-font);
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .timeline-desc {
+            color: var(--text-primary);
+            opacity: 0.8;
+            margin-bottom: 15px;
+        }
+
+        .timeline-link {
+            display: inline-flex;
+            align-items: center;
+            color: var(--text-accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .timeline-link:hover {
+            transform: translateX(5px);
+        }
+
+        /* Stats Section */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .stat-box {
+            background: var(--secondary-bg);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            transition: var(--transition);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 20px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .stat-icon i {
+            font-size: 1.8rem;
+            color: white;
+        }
+
+        .stat-number {
+            font-family: var(--heading-font);
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--text-primary);
+            opacity: 0.8;
+        }
+
+        /* Relationship Status Section */
+        .status-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .status-display {
+            background: var(--secondary-bg);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .status-title {
+            font-family: var(--heading-font);
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--text-accent);
+        }
+
+        .status-desc {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .status-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .status-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .status-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        }
+
+        .status-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--secondary-bg);
+            transition: var(--transition);
+        }
+
+        .status-dot.active {
+            background: var(--text-accent);
+        }
+
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .project-card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            position: relative;
+            height: 300px;
+            perspective: 1000px;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 100%;
+            background: var(--gradient);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-family: var(--heading-font);
+            font-size: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: var(--transition);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .project-card:hover .project-overlay {
+            opacity: 1;
+        }
+
+        .project-title {
+            font-family: var(--heading-font);
+            font-size: 1.5rem;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .project-btn {
+            padding: 10px 20px;
+            background: white;
+            color: var(--text-primary);
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .project-btn:hover {
+            background: var(--text-accent);
+            color: white;
+        }
+
+        /* 3D Background */
+        .three-d-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        /* Contact Section */
+        .contact-container {
+            display: flex;
+            gap: 50px;
+            margin-top: 50px;
+        }
+
+        .contact-info {
+            flex: 1;
+        }
+
+        .contact-form {
+            flex: 1;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .contact-icon i {
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .contact-details h3 {
+            font-family: var(--heading-font);
+            margin-bottom: 5px;
+        }
+
+        .social-connect {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .social-connect {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .social-connect p {
+            margin-bottom: 15px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--secondary-bg);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: var(--transition);
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .social-icon:hover {
+            background: var(--gradient);
+            color: white;
+            transform: translateY(-5px);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            background: var(--secondary-bg);
+            color: var(--text-primary);
+            font-family: var(--body-font);
+            transition: var(--transition);
+        }
+
+        body.dark-mode .form-control {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--text-accent);
+        }
+
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--secondary-bg);
+            padding: 40px 5%;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-text {
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+
+        /* Text Animation Effects */
+        .text-effect {
+            position: relative;
+            display: inline-block;
+        }
+
+        .text-effect::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--gradient);
+            transform: scaleX(0);
+            transform-origin: bottom right;
+            transition: transform 0.5s ease;
+        }
+
+        .text-effect:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        /* Empty Projects Animation */
+        .empty-project {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .empty-project-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .empty-project-text {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .empty-project-reason {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            font-style: italic;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .hero-content {
+                flex-direction: column;
+            }
+            
+            .hero-text {
+                padding-right: 0;
+                margin-bottom: 50px;
+                text-align: center;
+            }
+            
+            .hero-graphic {
+                width: 100%;
+            }
+            
+            .about-lists {
+                flex-direction: column;
+                gap: 30px;
+            }
+            
+            .contact-container {
+                flex-direction: column;
+            }
+            
+            .timeline::after {
+                left: 31px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .timeline-item:nth-child(even) {
+                left: 0;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .name {
+                font-size: 3rem;
+            }
+            
+            .tagline {
+                font-size: 1.3rem;
+            }
+            
+            .section-title {
+                font-size: 2.2rem;
+            }
+            
+            .about-content {
+                padding: 30px;
+            }
+            
+            .skills-grid {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            }
+            
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: var(--primary-bg);
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+            }
+            
+            body.dark-mode nav ul {
+                background: var(--dark-primary-bg);
+            }
+            
+            nav ul.show {
+                display: flex;
+            }
+            
+            nav ul li {
+                margin: 10px 0;
+            }
+            
+            .hamburger {
+                display: flex;
+            }
+            
+            .hamburger.active span:nth-child(1) {
+                transform: rotate(45deg) translate(5px, 5px);
+            }
+            
+            .hamburger.active span:nth-child(2) {
+                opacity: 0;
+            }
+            
+            .hamburger.active span:nth-child(3) {
+                transform: rotate(-45deg) translate(7px, -6px);
+            }
+            
+            .name {
+                font-size: 2.5rem;
+            }
+            
+            .tagline {
+                font-size: 1.2rem;
+            }
+            
+            .cta-buttons {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .section {
+                padding: 80px 5%;
+            }
+            
+            .about-content {
+                padding: 20px;
+            }
+            
+            .skills-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 20px;
+            }
+            
+            .projects-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 20px;
+            }
+            
+            .status-display {
+                padding: 30px 20px;
+            }
+            
+            .status-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .name {
+                font-size: 2rem;
+            }
+            
+            .tagline {
+                font-size: 1rem;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .section {
+                padding: 60px 5%;
+            }
+            
+            .skills-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 200px;
+                text-align: center;
+            }
+            
+            .timeline-content {
+                padding: 15px 20px;
+            }
+            
+            .status-display {
+                min-height: 250px;
+            }
+            
+            .status-title {
+                font-size: 1.3rem;
+            }
+            
+            .status-desc {
+                font-size: 1rem;
+            }
+        }
+
+        /* Background Animation */
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .background-animation canvas {
+            display: block;
+        }
+
+        /* Magnetic button effect */
+        .magnetic-btn {
+            transition: transform 0.3s ease;
+        }
+
+        .magnetic-btn:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="logo-animation">
+            <div class="logo-line logo-line-1"></div>
+            <div class="logo-line logo-line-2"></div>
+            <div class="logo-line logo-line-3"></div>
+        </div>
+        <div class="loading-bar">
+            <div class="loading-progress"></div>
+        </div>
+    </div>
+
+    <!-- Background Animation -->
+    <div class="background-animation" id="background-animation"></div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <!-- Navigation -->
+    <header>
+        <div class="logo">RKS</div>
+        <nav>
+            <ul>
+                <li><a href="#home" class="text-effect">Home</a></li>
+                <li><a href="#about" class="text-effect">About</a></li>
+                <li><a href="#skills" class="text-effect">Skills</a></li>
+                <li><a href="#education" class="text-effect">Education</a></li>
+                <li><a href="#projects" class="text-effect">Projects</a></li>
+                <li><a href="#contact" class="text-effect">Contact</a></li>
+            </ul>
+        </nav>
+        <button class="theme-toggle">
+            <span class="theme-icon">🌙</span>
+        </button>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-text">
+                <p class="greeting">नमस्ते, I'm</p>
+                <h1 class="name">Rohit Kumar Sah</h1>
+                <p class="tagline">Engineer by Profession, Meme Creator by Passion 😎✨</p>
+                <div class="cta-buttons">
+                    <a href="#projects" class="btn btn-primary magnetic-btn">View My Work</a>
+                    <a href="#contact" class="btn btn-secondary magnetic-btn">Get In Touch</a>
+                </div>
+            </div>
+            <div class="hero-graphic">
+                <!-- 3D scene will be implemented with Three.js -->
+                <canvas id="hero-canvas"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section" id="about">
+        <h2 class="section-title">About Me</h2>
+        <div class="about-content">
+            <p class="about-text">Hi, I'm Rohit Kumar Sah – a curious mind navigating the crossroads of technology and creativity. I thrive on building digital experiences that are not just functional but meaningful, blending logic with artistry to solve real-world problems.</p>
+            
+            <div class="about-lists">
+                <div class="list-container">
+                    <h3 class="list-title">Professionally</h3>
+                    <ul class="styled-list">
+                        <li>A Backend Developer with a love for clean, efficient code.</li>
+                        <li>A Digital Content Creator who believes in storytelling through visuals and words.</li>
+                        <li>An AI Enthusiast exploring the frontiers of machine intelligence.</li>
+                        <li>A Creative Problem Solver who enjoys turning complex challenges into elegant solutions.</li>
+                    </ul>
+                </div>
+                <div class="list-container">
+                    <h3 class="list-title">Personally</h3>
+                    <ul class="styled-list">
+                        <li>A Photography Buff capturing moments and perspectives.</li>
+                        <li>A Music Lover with an eclectic taste spanning genres.</li>
+                        <li>A Tech Explorer always curious about the next innovation.</li>
+                        <li>A Dreamer with a passion for turning ideas into reality.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="section" id="skills">
+        <h2 class="section-title">Skills & Proficiency</h2>
+        <div class="skills-grid">
+            <div class="skill-pod">
+                <div class="skill-icon">
+                    <i class="fas fa-code"></i>
+                </div>
+                <h3 class="skill-name">C Programming</h3>
+                <p>Brain with C-code synapses</p>
+            </div>
+            <div class="skill-pod">
+                <div class="skill-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <h3 class="skill-name">Communication</h3>
+                <p>Stylized speech bubbles</p>
+            </div>
+            <div class="skill-pod">
+                <div class="skill-icon">
+                    <i class="fas fa-server"></i>
+                </div>
+                <h3 class="skill-name">Backend Development</h3>
+                <p>Server rack with connections</p>
+            </div>
+            <div class="skill-pod">
+                <div class="skill-icon">
+                    <i class="fas fa-shoe-prints"></i>
+                </div>
+                <h3 class="skill-name">AI Sneaker Tech</h3>
+                <p>Sneaker with neural network</p>
+            </div>
+            <div class="skill-pod">
+                <div class="skill-icon">
+                    <i class="fas fa-camera"></i>
+                </div>
+                <h3 class="skill-name">Photography</h3>
+                <p>Camera lens with flare</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section class="section" id="education">
+        <h2 class="section-title">Education</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <p class="timeline-date">2025 - After</p>
+                    <h3 class="timeline-title">“Future Bachelor’s Student (Loading… ⏳)”
+
+Currently preparing myself—mentally, emotionally, and spiritually—to survive 4 years of assignments, labs, and surprise viva exams.</h3>
+                    
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <p class="timeline-date">2023 - 2025</p>
+                    <h3 class="timeline-title">+2 in Science</h3>
+                    <p class="timeline-desc">Arniko College, Biratnagar </p>
+                    <a href="https://www.facebook.com/arnikobrt" class="timeline-link" target="_blank">View on Facebook →</a>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <p class="timeline-date">2022</p>
+                    <h3 class="timeline-title">School Level (SEE)</h3>
+                    <p class="timeline-desc">सत्यनारायण माध्यमिक विद्यालय विराटनगर, ७ </p>
+                    <a href="https://www.facebook.com/Satyanarayan2009" class="timeline-link" target="_blank">View on Facebook →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="section" id="stats">
+        <h2 class="section-title">Social Proof & Stats</h2>
+        <div class="stats-container">
+            <div class="stat-box">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-number" data-target="400">0</div>
+                <div class="stat-label">Facebook Friends</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon">
+                    <i class="fas fa-film"></i>
+                </div>
+                <div class="stat-number" data-target="500">0</div>
+                <div class="stat-label">Instagram Reels Views</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <div class="stat-number" data-target="600">0</div>
+                <div class="stat-label">Instagram Followers</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon">
+                    <i class="fas fa-handshake"></i>
+                </div>
+                <div class="stat-number" data-target="130">0</div>
+                <div class="stat-label">Mutual Connections</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Relationship Status Section -->
+    <section class="section" id="relationship">
+        <h2 class="section-title">Relationship Status</h2>
+        <div class="status-container">
+            <div class="status-display">
+                <div class="status-icon">🔧</div>
+                <h3 class="status-title">Under Maintenance</h3>
+                <p class="status-desc">Currently focused on personal growth and career development. The relationship module is temporarily offline for upgrades.</p>
+            </div>
+            <div class="status-controls">
+                <button class="status-btn prev-btn">←</button>
+                <div class="status-indicator">
+                    <span class="status-dot active"></span>
+                    <span class="status-dot"></span>
+                    <span class="status-dot"></span>
+                </div>
+                <button class="status-btn next-btn">→</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="section" id="projects">
+        <h2 class="section-title">Projects</h2>
+        <p style="text-align: center; margin-bottom: 30px;">A collection of my digital creations. More coming soon...</p>
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-image">
+                    <div class="empty-project">
+                        <div class="empty-project-icon">🚧</div>
+                        <div class="empty-project-text">Project Under Construction</div>
+                        <div class="empty-project-reason">My code is still compiling... Please hold!</div>
+                    </div>
+                </div>
+                <div class="project-overlay">
+                    <h3 class="project-title">Coming Soon</h3>
+                    <a href="#" class="project-btn magnetic-btn">Stay Tuned</a>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-image">
+                    <div class="empty-project">
+                        <div class="empty-project-icon">⏳</div>
+                        <div class="empty-project-text">Loading Creative Ideas</div>
+                        <div class="empty-project-reason">My brain is buffering... 99% complete!</div>
+                    </div>
+                </div>
+                <div class="project-overlay">
+                    <h3 class="project-title">In Progress</h3>
+                    <a href="#" class="project-btn magnetic-btn">Check Back Later</a>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-image">
+                    <div class="empty-project">
+                        <div class="empty-project-icon">💡</div>
+                        <div class="empty-project-text">Ideas Incubating</div>
+                        <div class="empty-project-reason">My creativity is currently rendering...</div>
+                    </div>
+                </div>
+                <div class="project-overlay">
+                    <h3 class="project-title">On The Way</h3>
+                    <a href="#" class="project-btn magnetic-btn">Coming Soon</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section" id="contact">
+        <h2 class="section-title">Get In Touch</h2>
+        <div class="contact-container">
+            <div class="contact-info">
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h3>Phone</h3>
+                        <p>+977-9812713821</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h3>Email</h3>
+                        <p>sha629650@gmail.com</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h3>Location</h3>
+                        <p>Biratnagar,Nepal</p>
+                    </div>
+                </div>
+                <div class="social-connect">
+    <p>Let's connect beyond the screen! Send a friend request on Facebook or follow my journey on Instagram.</p>
+    <div class="social-icons">
+        <!-- Replace these with your actual profile URLs -->
+        <a href="https://www.facebook.com/rohit.sah.834868" class="social-icon magnetic-btn" target="_blank" rel="noopener noreferrer">
+            <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="https://www.instagram.com/rohit.sah_____/" class="social-icon magnetic-btn" target="_blank" rel="noopener noreferrer">
+            <i class="fab fa-instagram"></i>
+        </a>
+    </div>
+</div>
+            </div>
+            <div class="contact-form">
+                <form id="contactForm">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" class="form-control" placeholder="Your Email" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" placeholder="Your Message" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn magnetic-btn">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <footer>
+    <div class="footer-content">
+        <p class="footer-text">© 2023 Rohit Kumar Sah. Crafted with 💻 and ☕.</p>
+        <div class="social-icons">
+            <a href="https://www.facebook.com/rohit.sah.834868" class="social-icon magnetic-btn" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="https://www.instagram.com/rohit.sah_____/" class="social-icon magnetic-btn" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-instagram"></i>
+            </a>
+        </div>
+    </div>
+</footer>
+    </footer>
+
+    <script>
+        // Preloader
+        window.addEventListener('load', function() {
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => {
+                preloader.style.opacity = '0';
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                }, 500);
+            }, 2000);
+        });
+
+        // Custom Cursor
+        const cursor = document.querySelector('.cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // Add hover effect to clickable elements
+        const clickableElements = document.querySelectorAll('a, button, .skill-pod, .project-card');
+        clickableElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.classList.add('hover');
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.classList.remove('hover');
+            });
+        });
+
+        // Theme Toggle
+        const themeToggle = document.querySelector('.theme-toggle');
+        const themeIcon = document.querySelector('.theme-icon');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                themeIcon.textContent = '☀️';
+            } else {
+                themeIcon.textContent = '🌙';
+            }
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Stats Counter
+        const statNumbers = document.querySelectorAll('.stat-number');
+        const observerOptions = {
+            threshold: 0.5
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const target = entry.target;
+                    const targetValue = parseInt(target.getAttribute('data-target'));
+                    const duration = 2000; // 2 seconds
+                    const step = targetValue / (duration / 16); // 60fps
+                    let current = 0;
+                    
+                    const timer = setInterval(() => {
+                        current += step;
+                        if (current >= targetValue) {
+                            current = targetValue;
+                            clearInterval(timer);
+                        }
+                        target.textContent = Math.floor(current).toLocaleString();
+                    }, 16);
+                    
+                    observer.unobserve(target);
+                }
+            });
+        }, observerOptions);
+
+        statNumbers.forEach(stat => {
+            observer.observe(stat);
+        });
+
+        // Relationship Status Carousel
+        const statusDisplay = document.querySelector('.status-display');
+        const statusDots = document.querySelectorAll('.status-dot');
+        const prevBtn = document.querySelector('.prev-btn');
+        const nextBtn = document.querySelector('.next-btn');
+        
+        const statusData = [
+            {
+                icon: '🔧',
+                title: 'Under Maintenance',
+                desc: 'Currently focused on personal growth and career development. The relationship module is temporarily offline for upgrades.'
+            },
+            {
+                icon: '💝',
+                title: 'Beta Version of Love',
+                desc: 'Still in development phase. Testing emotional algorithms and compatibility matrices before full deployment.'
+            },
+            {
+                icon: '🎨',
+                title: 'Creative Twist',
+                desc: 'Adding unique features and personal touches to create something truly special and one-of-a-kind.'
+            }
+        ];
+        
+        let currentStatus = 0;
+        
+        function updateStatusDisplay() {
+            const status = statusData[currentStatus];
+            statusDisplay.innerHTML = `
+                <div class="status-icon">${status.icon}</div>
+                <h3 class="status-title">${status.title}</h3>
+                <p class="status-desc">${status.desc}</p>
+            `;
+            
+            statusDots.forEach((dot, index) => {
+                if (index === currentStatus) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+        
+        nextBtn.addEventListener('click', () => {
+            currentStatus = (currentStatus + 1) % statusData.length;
+            updateStatusDisplay();
+        });
+        
+        prevBtn.addEventListener('click', () => {
+            currentStatus = (currentStatus - 1 + statusData.length) % statusData.length;
+            updateStatusDisplay();
+        });
+
+        // Form submission
+        const contactForm = document.getElementById('contactForm');
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Thank you for your message! I\'ll get back to you soon.');
+            contactForm.reset();
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Mobile menu toggle
+        const hamburger = document.querySelector('.hamburger');
+        const nav = document.querySelector('nav ul');
+        
+        hamburger.addEventListener('click', () => {
+            nav.classList.toggle('show');
+            hamburger.classList.toggle('active');
+        });
+
+        // Background Animation
+        function initBackgroundAnimation() {
+            const container = document.getElementById('background-animation');
+            const canvas = document.createElement('canvas');
+            container.appendChild(canvas);
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas size
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            // Create particles
+            const particles = [];
+            const particleCount = 150;
+            
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 3 + 1,
+                    speedX: (Math.random() - 0.5) * 0.5,
+                    speedY: (Math.random() - 0.5) * 0.5,
+                    color: document.body.classList.contains('dark-mode') 
+                        ? `rgba(129, 140, 248, ${Math.random() * 0.5})`
+                        : `rgba(99, 102, 241, ${Math.random() * 0.5})`
+                });
+            }
+            
+            // Animation loop
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Update and draw particles
+                particles.forEach(particle => {
+                    particle.x += particle.speedX;
+                    particle.y += particle.speedY;
+                    
+                    // Wrap around edges
+                    if (particle.x < 0) particle.x = canvas.width;
+                    if (particle.x > canvas.width) particle.x = 0;
+                    if (particle.y < 0) particle.y = canvas.height;
+                    if (particle.y > canvas.height) particle.y = 0;
+                    
+                    // Draw particle
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    ctx.fillStyle = particle.color;
+                    ctx.fill();
+                });
+                
+                // Draw connecting lines
+                particles.forEach((particle, i) => {
+                    particles.slice(i + 1).forEach(otherParticle => {
+                        const dx = particle.x - otherParticle.x;
+                        const dy = particle.y - otherParticle.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 100) {
+                            ctx.beginPath();
+                            ctx.strokeStyle = document.body.classList.contains('dark-mode') 
+                                ? `rgba(129, 140, 248, ${0.2 * (1 - distance/100)})`
+                                : `rgba(99, 102, 241, ${0.2 * (1 - distance/100)})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.moveTo(particle.x, particle.y);
+                            ctx.lineTo(otherParticle.x, otherParticle.y);
+                            ctx.stroke();
+                        }
+                    });
+                });
+                
+                requestAnimationFrame(animate);
+            }
+            
+            animate();
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        }
+        
+        // Initialize background animation
+        initBackgroundAnimation();
+
+        // Magnetic button effect
+        const magneticButtons = document.querySelectorAll('.magnetic-btn');
+        magneticButtons.forEach(button => {
+            button.addEventListener('mousemove', (e) => {
+                const rect = button.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                
+                gsap.to(button, {
+                    x: x * 0.3,
+                    y: y * 0.3,
+                    duration: 0.3,
+                    ease: 'power2.out'
+                });
+            });
+            
+            button.addEventListener('mouseleave', () => {
+                gsap.to(button, {
+                    x: 0,
+                    y: 0,
+                    duration: 0.3,
+                    ease: 'power2.out'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
